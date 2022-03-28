@@ -1,5 +1,5 @@
 <?php
-include "dash_header.php";
+include "dash_header.php"; //this is page for updating profile data, first we fetch data , fill the inputs, and handle the request in controller in system folder
 
 $userQuery = $pdo->prepare("SELECT * FROM users WHERE id=:uid");
 $userQuery->execute([':uid' => $_SESSION['id']]);

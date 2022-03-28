@@ -1,6 +1,7 @@
 <?php
 include "header.php";
-require_once "system/regController.php";
+require_once "system/regController.php"; //we include the controller file for registration process, which will handle the post request coming from the form
+
 ?>
 <!-- Titlebar
 ================================================== -->
@@ -26,7 +27,7 @@ require_once "system/regController.php";
 					<span>Artıq qeydiyyatınız var? <a href="login.php">Login edin!</a></span>
 				</div>
 				<?php 
-				if(isset($errors) && count($errors) > 0)
+				if(isset($errors) && count($errors) > 0) // we handle error and success messages coming from controller
 				{
 					foreach($errors as $error_msg)
 					{

@@ -3,7 +3,7 @@
 require_once('dbController.php');
 require_once "userTypeController.php";
 
-if(isadmin()){
+if(isadmin()){ //for admin setting change, we need authorization of admin, so it is not misused
 
     if(isset($_POST['editSettingsAdmin'])){
         $commission_rate = htmlspecialchars(trim($_POST['rate']));
@@ -12,7 +12,7 @@ if(isadmin()){
         $editSettingsQuery->execute([
             ':commission_rate' => $commission_rate,
             ':minimum_balance' => $minimum_balance
-        ]);
+        ]); //getting data from the post request, trimming and validating, and then updating database with sql
         header('Location: ../dashboard/admin_settings.php');
     }  
     

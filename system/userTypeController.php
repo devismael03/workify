@@ -1,6 +1,6 @@
 <?php
-@session_start();
-function isadmin() {
+@session_start(); //this file contains helper functions to verify authorization
+function isadmin() { //if user type is 3, then it is admin and etc.
 
     if(isset($_SESSION['id'])){
 

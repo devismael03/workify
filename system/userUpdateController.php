@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('Asia/Baku');
 @session_start();
-require_once('dbController.php');
+require_once('dbController.php'); //this controller is used to update user data, also includes file upload process
 require_once('userTypeController.php');
 
 if(isfreelancer() || isemployer() || isadmin()){
@@ -22,7 +22,7 @@ if(isfreelancer() || isemployer() || isadmin()){
             if(!is_uploaded_file($_FILES['avatar']['tmp_name'])){
                 $avatar = $avatarInDb['avatar'];
             }else{
-                $uploadedName = $_FILES["avatar"]["name"];
+                $uploadedName = $_FILES["avatar"]["name"]; // uploaded profile picture name is stored in FILES global variable(built in)
                 $uploadedPath = $_FILES['avatar']['tmp_name'];
                 $allowedTypes = [
                     'image/png' => 'png',
@@ -31,10 +31,10 @@ if(isfreelancer() || isemployer() || isadmin()){
                 $fileSize = filesize($uploadedPath);
                 $fileinfo = finfo_open(FILEINFO_MIME_TYPE);
                 $filetype = finfo_file($fileinfo, $uploadedPath);
-                if($fileSize > 0 && $fileSize < 1048576 && in_array($filetype, array_keys($allowedTypes))){
+                if($fileSize > 0 && $fileSize < 1048576 && in_array($filetype, array_keys($allowedTypes))){ //checking if file is not big in size, and only png and jpg
                     $fileName = md5($firstName.$lastName).time();
                     $extension = $allowedTypes[$filetype];
-                    $targetDirectory = "../assets/images/profile_pictures";
+                    $targetDirectory = "../assets/images/profile_pictures"; //adding our file to storage in cloud
                     $newFilepath = $targetDirectory . "/" . $fileName . "." . $extension;
                     move_uploaded_file($uploadedPath,$newFilepath);
                     $avatar = $fileName.".".$extension;

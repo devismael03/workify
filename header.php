@@ -1,8 +1,8 @@
 <?php
-ob_start();
+ob_start(); //in all pages we start session to store user details after it is authenticated
 session_start();
 
-require 'system/dbController.php';
+require 'system/dbController.php'; //in all pages we also need database connection, so we include config file also
 ?>
 <!doctype html>
 <html lang="en">

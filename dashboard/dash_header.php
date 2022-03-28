@@ -1,14 +1,14 @@
 <?php 
-ob_start();
+ob_start(); //in all dashboard pages, we need database config file, and user type controller(for authorization of roles)
 @session_start();
 require_once "../system/dbController.php";
 require_once "../system/userTypeController.php";
     
   
-    if(!$_SESSION['id']){
+    if(!$_SESSION['id']){ //if user is not authenticated, he/she is not allowed to enter dashboard, and is redirected to login page
         header('location:../login.php');
     }
-$userProfilePictureQuery = $pdo->prepare("SELECT user_type,avatar,first_name,last_name FROM users WHERE id=:uid");
+$userProfilePictureQuery = $pdo->prepare("SELECT user_type,avatar,first_name,last_name FROM users WHERE id=:uid"); //we fetch user profile information from database
 $userProfilePictureQuery->execute([':uid'=>$_SESSION['id']]);
 $userProfilePicture = $userProfilePictureQuery->fetch(PDO::FETCH_ASSOC);
 

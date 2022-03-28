@@ -1,9 +1,9 @@
 <?php
-require_once "../system/userTypeController.php";
-if(isadmin()){
+require_once "../system/userTypeController.php"; // this is page of dashboard where we can change the settings of the platform(only admin access)
+if(isadmin()){ //checking if the authenticated user is administrator
 	require_once 'dash_header.php';
 	require_once 'dash_sidebar.php';
-	$getSettingsQuery = $pdo->prepare("SELECT * FROM admin_settings WHERE setting_id=1");
+	$getSettingsQuery = $pdo->prepare("SELECT * FROM admin_settings WHERE setting_id=1"); //we select the settings from database and visualize them in inputs
 	$getSettingsQuery->execute();
 	$settings = $getSettingsQuery->fetch(PDO::FETCH_ASSOC);
 ?>

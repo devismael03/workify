@@ -1,5 +1,5 @@
 <?php
-include "header.php";
+include "header.php"; //in all pages we include header and footer files to create layout
 
 ?>
 <!-- Intro Banner

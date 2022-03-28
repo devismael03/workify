@@ -3,23 +3,23 @@ date_default_timezone_set('Asia/Baku');
 @session_start();
 require_once('dbController.php');
 
-if(isset($_POST['submit']))
+if(isset($_POST['submit'])) //if submit button is pressed in registration page
 {
     if(isset($_POST['first_name'],$_POST['last_name'],$_POST['number'],$_POST['email'],$_POST['password'],$_POST['user_type']) && !empty($_POST['number']) && !empty($_POST['first_name']) && !empty($_POST['last_name']) && !empty($_POST['email']) && !empty($_POST['password']) && !empty($_POST['user_type']))
     {
        
-        $firstName = htmlspecialchars(trim($_POST['first_name']));
+        $firstName = htmlspecialchars(trim($_POST['first_name'])); //trimming and escaping our dataa from html tags to prevenet XSS attack
         $lastName = htmlspecialchars(trim($_POST['last_name']));
         $email = htmlspecialchars(trim($_POST['email']));
         $password = htmlspecialchars(trim($_POST['password']));
         $user_type = htmlspecialchars(trim($_POST['user_type']));
-        if($user_type != '1' && $user_type !='2'){
+        if($user_type != '1' && $user_type !='2'){ //if user manipulated html form and changed user_type to data other than 1 or 2, we cancel the operation and redirect to login page
             header("Location:index.php");
         }
         else{
             $number = htmlspecialchars(trim($_POST['number']));
             $options = array("cost"=>5);
-            $hashPassword = password_hash($password,PASSWORD_BCRYPT,$options);
+            $hashPassword = password_hash($password,PASSWORD_BCRYPT,$options); // IMPORTANT: We encrypt the password with bcrypt function and store database in that form
             $avatar = 'user-avatar-placeholder.png';
             $date = date('Y-m-d H:i:s');
 
@@ -30,7 +30,7 @@ if(isset($_POST['submit']))
                 $p = ['email'=>$email];
                 $stmt->execute($p);
                 
-                if($stmt->rowCount() == 0)
+                if($stmt->rowCount() == 0) //if the email is not present in database(so the user is unique) we push the data to database
                 {
                     $sql = "insert into users (first_name, last_name, email, number, `password`, avatar, user_type, created_at,updated_at) values(:fname,:lname,:email,:number,:pass,:avatar,:user_type,:created_at,:updated_at)";
                     try{
@@ -76,7 +76,7 @@ if(isset($_POST['submit']))
     }
     else
     {
-        if(!isset($_POST['first_name']) || empty($_POST['first_name']))
+        if(!isset($_POST['first_name']) || empty($_POST['first_name'])) //for each error, we generate error message and add it to errors array, to display message in page
         {
             $errors[] = 'Ad vacibdir';
         }

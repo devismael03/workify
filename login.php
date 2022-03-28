@@ -1,8 +1,8 @@
 <?php
 require "header.php";
-require_once "system/loginController.php";
+require_once "system/loginController.php"; //we include the controller file for login process, which will handle the post request coming from the form
 
-if(isset($_SESSION['id'])){
+if(isset($_SESSION['id'])){ //if user is already authenticaded, and still tries to enter login page, we redirect him/her to main page
 	header("Location:dashboard/index.php");
 }
 ?>
@@ -30,7 +30,7 @@ if(isset($_SESSION['id'])){
 					<span>Hesabınız yoxdur? <a href="register.php">Qeydiyyatdan keçin!</a></span>
 				</div>
 				<?php 
-				if(isset($errors) && count($errors) > 0)
+				if(isset($errors) && count($errors) > 0) // we visualize the error messages coming from the controller, if the authentication is not correct
 				{
 					foreach($errors as $error_msg)
 					{

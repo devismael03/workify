@@ -1,8 +1,8 @@
 <?php
-require_once "dash_header.php";
+require_once "dash_header.php"; //for all pages, we include header,footer and sidebar files to include basic layout(which is same for all page)
 require_once "dash_sidebar.php";
 
-$getUserInfo = $pdo->prepare("SELECT * FROM users WHERE id=:id");
+$getUserInfo = $pdo->prepare("SELECT * FROM users WHERE id=:id"); //we get id from the session, and fetch corresponding user data from database
 $getUserInfo->execute([':id'=>$_SESSION['id']]);
 $user = $getUserInfo->fetch(PDO::FETCH_ASSOC);
 
