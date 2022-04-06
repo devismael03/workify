@@ -37,26 +37,30 @@
                                         <li><a href="add_category.php">Yeni kateqoriya</a></li>
                                     </ul>	
                                 </li>
+                                <!-- 
                                 <li><a href="#"><i class="icon-feather-user"></i> Frilanserlər </a>
                                     <ul>
-                                        <li><a href="freelancers_admin.php">Frilanser siyahısı<span class="nav-tag"><?php echo $countOfFreelancers['count']; ?></span></a></li>
+                                        <li><a href="freelancers_admin.php">Frilanser siyahısı<span class="nav-tag"></span></a></li>
                                     </ul>
                                 </li>
                                 <li><a href="#"><i class="icon-feather-user"></i> İşəgötürənlər </a>
                                     <ul>
-                                        <li><a href="employers_admin.php">İşəgötürənlərin siyahısı<span class="nav-tag"><?php echo $countOfEmployers['count']; ?></span></a></li>
+                                        <li><a href="employers_admin.php">İşəgötürənlərin siyahısı<span class="nav-tag"></span></a></li>
                                     </ul>
                                 </li>
+                            
                                 <li><a href="#"><i class="icon-material-outline-business-center"></i> Xidmətlər </a>
                                     <ul>
-                                        <li><a href="jobs_admin.php">Xidmətlərin siyahısı<span class="nav-tag"><?php echo $countOfJobs['count']; ?></span></a></li>
+                                        <li><a href="jobs_admin.php">Xidmətlərin siyahısı<span class="nav-tag"></span></a></li>
                                     </ul>
                                 </li>
+                                
                                 <li><a href="#"><i class="icon-material-outline-rate-review"></i> Dəyərləndirmələr </a>
                                     <ul>
-                                        <li><a href="reviews_admin.php">Dəyərləndirmələrin siyahısı<span class="nav-tag"><?php echo $countOfReviews['count']; ?></span></a></li>
+                                        <li><a href="reviews_admin.php">Dəyərləndirmələrin siyahısı<span class="nav-tag"></span></a></li>
                                     </ul>
                                 </li>
+                                !-->
                                 <li><a href="admin_settings.php"><i class="icon-material-outline-settings"></i> Ümumi tənzimləmələr</a></li>
                                 <li><a href="balance_admin.php"><i class="icon-material-outline-account-balance-wallet"></i> Balans əməliyyatları</a></li>
                             </ul>

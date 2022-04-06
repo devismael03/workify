@@ -1,6 +1,28 @@
 <?php
 include "header.php"; //in all pages we include header and footer files to create layout
 
+$getJobsCountQuery = $pdo->prepare("SELECT COUNT(*) as job_count FROM jobs");
+$getJobsCountQuery->execute();
+$getJobsCount = $getJobsCountQuery->fetch(PDO::FETCH_ASSOC);
+
+$getOrdersCountQuery = $pdo->prepare("SELECT COUNT(*) as order_count FROM orders");
+$getOrdersCountQuery->execute();
+$getOrdersCount = $getOrdersCountQuery->fetch(PDO::FETCH_ASSOC);
+
+$getFreelancerCountQuery = $pdo->prepare("SELECT COUNT(*) as freelancer_count FROM users WHERE user_type=1");
+$getFreelancerCountQuery->execute();
+$getFreelancerCount = $getFreelancerCountQuery->fetch(PDO::FETCH_ASSOC);
+
+$regionsQuery = $pdo->prepare("SELECT * FROM regions");
+$regionsQuery->execute();
+$regions = $regionsQuery->fetchAll(PDO::FETCH_ASSOC);
+
+$selectHtml = "<select class=\"selectpicker\" name=\"location[]\" multiple data-size=\"7\" title=\"Bütün lokasiyalar\" data-selected-text-format=\"count\">";
+foreach($regions as $region){
+	$selectHtml .= "<option value={$region['region_id']}> {$region['region_title']}</option>";
+}
+
+$selectHtml.="</select>";
 ?>
 <!-- Intro Banner
 ================================================== -->
@@ -31,9 +53,7 @@ include "header.php"; //in all pages we include header and footer files to creat
 							<div class="intro-search-field with-autocomplete">
 								<label class="field-title ripple-effect">Harada?</label>
 								<div class="input-with-icon" >
-									<select class="selectpicker" multiple data-size="7" title="Bütün lokasiyalar">
-										<option value="">Baku</option>
-									</select>
+									<?= $selectHtml ?>
 								</div>
 							</div>
 
@@ -57,15 +77,15 @@ include "header.php"; //in all pages we include header and footer files to creat
 			<div class="col-md-12">
 				<ul class="intro-stats margin-top-45 hide-under-992px">
 					<li>
-						<strong class="counter">0</strong>
+						<strong class="counter"><?php echo $getJobsCount['job_count'];?></strong>
 						<span>Xidmət</span>
 					</li>
 					<li>
-						<strong class="counter">0</strong>
+						<strong class="counter"><?php echo $getOrdersCount['order_count'];?></strong>
 						<span>Əməliyyat</span>
 					</li>
 					<li>
-						<strong class="counter">0</strong>
+						<strong class="counter"><?php echo $getFreelancerCount['freelancer_count'];?></strong>
 						<span>Frilanser</span>
 					</li>
 				</ul>

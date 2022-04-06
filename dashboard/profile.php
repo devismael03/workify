@@ -17,11 +17,11 @@ if(isset($_GET['id'])){
 		header("Location:../index.php");
 	}
 	else{
-		$countOfJobsQuery = $pdo->prepare("SELECT COUNT(*) as count_jobs FROM jobs WHERE verification_status=1 AND user_id=:id");
+		$countOfJobsQuery = $pdo->prepare("SELECT COUNT(*) as count_jobs FROM jobs WHERE user_id=:id");
 		$countOfJobsQuery->execute([':id' => $id]);
 		$countOfJobs = $countOfJobsQuery->fetch(PDO::FETCH_ASSOC);
 
-		$countOfOperationsQuery = $pdo->prepare("SELECT COUNT(*) as count_operations FROM orders WHERE verification_status=1 AND completed_status=1 AND freelancer_id=:uid");
+		$countOfOperationsQuery = $pdo->prepare("SELECT COUNT(*) as count_operations FROM orders WHERE completed_status=1 AND freelancer_id=:uid");
 		$countOfOperationsQuery->execute([':uid' => $id]);
 		$countOfOperations = $countOfOperationsQuery->fetch(PDO::FETCH_ASSOC);
 
@@ -48,7 +48,7 @@ if(isset($_GET['id'])){
 		}
 		//check for id-s(if freelancer_id is really freelancer and employer_id is really employer) in review adding process
 		
-		$jobCountQuery = $pdo->prepare("SELECT COUNT(*) as count FROM jobs WHERE user_id=:fid AND verification_status=1");
+		$jobCountQuery = $pdo->prepare("SELECT COUNT(*) as count FROM jobs WHERE user_id=:fid");
 		$jobCountQuery->execute([':fid' => $id]);
 		$jobCount = $jobCountQuery->fetch(PDO::FETCH_ASSOC);
 
@@ -139,11 +139,11 @@ if(isset($_GET['id'])){
 #endpagination
 
 
-		$jobsQuery = $pdo->prepare("SELECT 	jobs.job_id, jobs.job_price, jobs.job_title, jobs.job_description, jobs.verification_status,
+		$jobsQuery = $pdo->prepare("SELECT 	jobs.job_id, jobs.job_price, jobs.job_title, jobs.job_description,
 											categories.category_name
 									FROM jobs
 									INNER JOIN categories on jobs.category_id=categories.category_id
-									WHERE jobs.user_id=:fid AND jobs.verification_status=1
+									WHERE jobs.user_id=:fid
 									ORDER BY job_id DESC
 									LIMIT {$offset}, {$no_of_records_per_page}");
 		$jobsQuery->execute([':fid' => $id]);

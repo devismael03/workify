@@ -49,6 +49,21 @@ $countOfCategories = $countOfCategoriesQuery->fetch(PDO::FETCH_ASSOC);
 
 // Count of Categories end
 
+
+//Count of all Jobs
+$countOfJobsQuery = $pdo->prepare("SELECT COUNT(*) as count FROM jobs");
+$countOfJobsQuery->execute();
+$countOfJobs = $countOfJobsQuery->fetch(PDO::FETCH_ASSOC);
+
+//Count of all jobs end
+
+//Count of all reviews
+$countOfReviewsQuery = $pdo->prepare("SELECT COUNT(*) as count FROM reviews");
+$countOfReviewsQuery->execute();
+$countOfReviews = $countOfReviewsQuery->fetch(PDO::FETCH_ASSOC);
+//Count of all reviews end
+
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -117,26 +132,7 @@ $countOfCategories = $countOfCategoriesQuery->fetch(PDO::FETCH_ASSOC);
 											<li><a href="add_category.php">Yeni kateqoriya</a></li>
 										</ul>
 									</li>
-									<li><a href="#">Frilanserlər</a>
-										<ul class="dropdown-nav">
-											<li><a href="freelancers_admin.php">Frilanser siyahısı</a></li>
-										</ul>
-									</li>	
-									<li><a href="#">İşəgötürənlər</a>
-										<ul class="dropdown-nav">
-											<li><a href="employers_admin.php">İşəgötürənlərin siyahısı</a></li>
-										</ul>
-									</li>
-									<li><a href="#">İşlər</a>
-										<ul class="dropdown-nav">
-											<li><a href="jobs_admin.php">Xidmətlərin siyahısı</a></li>
-										</ul>
-									</li>
-									<li><a href="#">Dəyərləndirmələr</a>
-										<ul class="dropdown-nav">
-											<li><a href="reviews_admin.php">Dəyərləndirmələrin siyahısı</a></li>
-										</ul>
-									</li>			
+									
 									<li><a href="admin_settings.php">Ümumi tənzimləmələr</a></li>
 									<li><a href="balance_admin.php">Balans əməliyyatları</a></li>
 								</ul>

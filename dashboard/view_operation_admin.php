@@ -1,36 +1,23 @@
 <?php
 require_once "../system/userTypeController.php";
-if(isfreelancer() || isemployer()){
+if(isadmin()){
 	require_once 'dash_header.php';
 	if(isset($_GET['id'])){
 		$id = htmlspecialchars(trim($_GET['id']));
-		$userid = $_SESSION['id'];
-		$url = '';
-		$sql = 'SELECT jobs.job_id, jobs.job_price, jobs.job_title, jobs.job_description, jobs.category_id,
-		categories.category_name,
-		orders.order_id, orders.created_at, orders.completed_status,orders.freelancer_id,
-		U1.first_name AS fre_first, U1.last_name AS fre_last, U1.number AS fre_number, U1.rating AS fre_rating, U1.id AS fre_id, U1.avatar AS fre_avatar,
-		U2.first_name AS emp_first, U2.last_name AS emp_last, U2.number AS emp_number, U2.avatar AS emp_avatar
-		FROM orders
-		INNER JOIN jobs ON orders.job_id = jobs.job_id
-		INNER JOIN categories ON jobs.category_id = categories.category_id
-		INNER JOIN users as U1 ON orders.freelancer_id = U1.id
-		INNER JOIN users as U2 on orders.employer_id = U2.id
-		WHERE orders.order_id=:id';
-		if(isfreelancer()){
-			$url='operations_freelancer.php';
-			$sql.=' AND orders.freelancer_id=:uid';
-		}
-		if(isemployer()){
-			$url = 'operations_employer.php';
-			$sql.=' AND orders.employer_id=:uid';
-		}
-		$orderQuery = $pdo->prepare($sql);
-		$orderQuery->execute([':id' => $id,':uid' => $userid]);
+		$orderQuery = $pdo->prepare("SELECT jobs.job_id, jobs.job_price, jobs.job_title, jobs.job_description, jobs.category_id,
+										categories.category_name,
+										orders.order_id, orders.created_at, orders.completed_status, orders.freelancer_id,
+										U1.first_name AS fre_first, U1.last_name AS fre_last, U1.number AS fre_number, U1.rating AS fre_rating, U1.avatar AS fre_avatar,
+										U2.first_name AS emp_first, U2.last_name AS emp_last, U2.number AS emp_number, U2.avatar AS emp_avatar
+										FROM orders
+										INNER JOIN jobs ON orders.job_id = jobs.job_id
+										INNER JOIN categories ON jobs.category_id = categories.category_id
+										INNER JOIN users as U1 ON orders.freelancer_id = U1.id
+										INNER JOIN users as U2 on orders.employer_id = U2.id
+										WHERE orders.order_id=:id");
+		$orderQuery->execute([':id' => $id]);
 		$order = $orderQuery->fetch(PDO::FETCH_ASSOC);
-		if(!$order){
-			header("Location:index.php");
-		}
+
 
 		$regionsQuery = $pdo->prepare("SELECT jobs.job_title, regions.region_title
 										FROM jobs
@@ -38,10 +25,6 @@ if(isfreelancer() || isemployer()){
 										LEFT JOIN regions on jobs_regions.region_id = regions.region_id
 										WHERE jobs_regions.job_id=:id");
 		$regionsQuery->execute([':id' => $order['job_id']]);
-	}
-	else{
-		header("Location:operations_freelancer.php");
-
 	}
 ?>
 
@@ -59,7 +42,6 @@ if(isfreelancer() || isemployer()){
 							<h5><?php echo $order['category_name']; ?></h5>
 							<br>
 							<span>Sifariş tarixi - <?php echo $order['created_at'];?></span>
-
 						</div>
 					</div>
 					
@@ -139,7 +121,6 @@ if(isfreelancer() || isemployer()){
 					</li>
 				</ul>
 			</div>
-			
 		</div>
 		
 
@@ -147,26 +128,17 @@ if(isfreelancer() || isemployer()){
 		<div class="col-xl-4 col-lg-4">
 			<div class="sidebar-container">
 				<div class="sidebar-widget">
-					<?php if(isemployer() && $order['completed_status'] == 1){?>	
-											
-						<a href="#small-dialog" class="button popup-with-zoom-anim">Frilanseri dəyərləndir</a><br>
-					<?php } ?>
-					<a href="<?php echo $url;?>" class="button"><i class="icon-feather-arrow-left"></i>Əməliyyatlar siyahısına geri dön</a>
+					<a href="operations_admin.php" class="button"><i class="icon-feather-arrow-left"></i>Əməliyyatlar siyahısına geri dön</a>
 				</div>
 				
 				
-
 				<div class="sidebar-widget">
 					Bitirilmə statusu: <b><?php echo $order['completed_status'] ? 'Bitirilib':'Bitirilməyib';?></b>
 					&nbsp;&nbsp;
-					<?php if(isfreelancer()){ if(!$order['completed_status']){ ?>
-						<a href="../system/operationFreelancerController.php?operation=toggle&id=<?php echo $order['order_id'];?>&returnTo=view" class="button" style="background-color:green;color:white;">Bitir</a>
-					<?php }} ?>
+					<?php if(!$order['completed_status']){ ?>
+						<a href="../system/operationAdminController.php?operation=toggleCompleted&id=<?php echo $order['order_id'];?>" class="button" style="background-color:green;color:white;">Bitir</a>
+					<?php } ?>			
 				</div>
-
-
-
-
 
 				<div class="single-page-section">
 					<h3 class="margin-top-30 margin-bottom-10">Lokasiya</h3>
@@ -191,60 +163,6 @@ if(isfreelancer() || isemployer()){
 					</div>
 				</div>
 			</div>
-		</div>
-	</div>
-</div>
-
-<div id="small-dialog" class="zoom-anim-dialog mfp-hide dialog-with-tabs">
-
-	<!--Tabs -->
-	<div class="sign-in-form">
-
-		<ul class="popup-tabs-nav">
-			<li><a href="#tab">Frilanseri dəyərləndir</a></li>
-		</ul>
-
-		<div class="popup-tabs-container">
-
-			<!-- Tab -->
-			<div class="popup-tab-content" id="tab">
-				
-				
-				<!-- Welcome Text -->
-				<div class="welcome-text">
-					<h3>Rəy yazın və reytinq təyin edin</h3>
-				</div>
-					
-				<!-- Form -->
-				<form method="post" action="../system/reviewEmployerController.php" id="apply-now-form">
-					<input type="hidden" name="freelancerId" value="<?php echo $order['fre_id'];?>">
-					<div class="input-with-icon-left">
-						<textarea name="description" id=""  placeholder="Rəyinizi yazın" required></textarea>
-					</div>
-					
-					<div class="feedback-yes-no">
-						<strong>Reytinq</strong>
-						<div class="leave-rating">
-							<input type="radio" name="rating" id="rating-radio-1" value="1" required>
-							<label for="rating-radio-1" class="icon-material-outline-star"></label>
-							<input type="radio" name="rating" id="rating-radio-2" value="2" required>
-							<label for="rating-radio-2" class="icon-material-outline-star"></label>
-							<input type="radio" name="rating" id="rating-radio-3" value="3" required>
-							<label for="rating-radio-3" class="icon-material-outline-star"></label>
-							<input type="radio" name="rating" id="rating-radio-4" value="4" required>
-							<label for="rating-radio-4" class="icon-material-outline-star"></label>
-							<input type="radio" name="rating" id="rating-radio-5" value="5" required>
-							<label for="rating-radio-5" class="icon-material-outline-star"></label>
-						</div><div class="clearfix"></div>
-					</div>
-
-				</form>
-				
-				<!-- Button -->
-				<button name="addReview" class="button margin-top-35 full-width button-sliding-icon ripple-effect" type="submit" form="apply-now-form">Dəyərləndir <i class="icon-material-outline-arrow-right-alt"></i></button>
-
-			</div>
-
 		</div>
 	</div>
 </div>

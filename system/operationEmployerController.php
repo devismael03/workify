@@ -15,7 +15,7 @@ if(isemployer()){
         }
         else if($_GET['operation'] == "new"){
             $job_id = htmlspecialchars(trim($_GET['job_id']));
-            $jobQuery = $pdo->prepare("SELECT * FROM jobs WHERE job_id=:jid AND verification_status=1");
+            $jobQuery = $pdo->prepare("SELECT * FROM jobs WHERE job_id=:jid");
             $jobQuery->execute([':jid'=>$job_id]);
             $job = $jobQuery->fetch(PDO::FETCH_ASSOC);
             if(!$job){

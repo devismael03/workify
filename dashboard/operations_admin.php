@@ -1,9 +1,9 @@
 <?php 
 require_once "../system/userTypeController.php";
-if(isfreelancer()){
+if(isadmin()){
 	require_once 'dash_header.php';
 	require_once 'dash_sidebar.php';
-	$freelancerId = $_SESSION['id'];
+
 #pagination	
 	if (isset($_GET['page'])) {
 		$page = htmlspecialchars(trim($_GET['page']));
@@ -11,8 +11,8 @@ if(isfreelancer()){
 		$page = 1;
 	}
 
-	$orderCountQuery = $pdo->prepare("SELECT COUNT(*) as count FROM orders WHERE freelancer_id=:id");
-	$orderCountQuery->execute(['id' => $freelancerId]);
+	$orderCountQuery = $pdo->prepare("SELECT COUNT(*) as count FROM orders");
+	$orderCountQuery->execute();
 	$orderCount = $orderCountQuery->fetch(PDO::FETCH_ASSOC);
 	$no_of_records_per_page = 10;
 	$offset = ($page-1) * $no_of_records_per_page; 
@@ -24,7 +24,7 @@ if(isfreelancer()){
 	$lpm = $total_pages - 1;
 
 	$pagination = "";
-	$url = "operations_freelancer.php";
+	$url = "operations_admin.php";
 
 	if($total_pages > 1){
 
@@ -106,10 +106,9 @@ if(isfreelancer()){
 										INNER JOIN jobs ON orders.job_id = jobs.job_id
 										INNER JOIN users as U1 ON orders.freelancer_id = U1.id
 										INNER JOIN users as U2 on orders.employer_id = U2.id
-										WHERE freelancer_id=:id
 										ORDER BY order_id DESC
 										LIMIT {$offset}, {$no_of_records_per_page}");
-	$ordersQuery->execute(['id' => $freelancerId]);
+	$ordersQuery->execute();
 
 
 ?>
@@ -122,6 +121,7 @@ if(isfreelancer()){
 			<!-- Dashboard Headline -->
 			<div class="dashboard-headline">
 				<h3>Əməliyyatlar</h3>
+
 			</div>
 	
 			<!-- Row -->
@@ -142,27 +142,22 @@ if(isfreelancer()){
 								<tr>
 									<th>Əməliyyat ID</th>
 									<th>İş adı</th>
+									<th>Frilanser Ad/Soyad</th>
 									<th>İşəgötürən Ad/Soyad</th>
-									<th>Bitmə statusu</th>
 									<th>Tarix</th>
 									<th>Əməliyyata bax</th>
-									<th>Əməliyyatı Bitir</th>
+									<th>Sil</th>
 								</tr>
 								<?php while($order = $ordersQuery->fetch(PDO::FETCH_ASSOC)){ ?>
 									<tr>
 										<td data-label="Əməliyyat ID"><?php echo $order['order_id'];?></td>
-										<td data-label="İş adı"><a href="view_job.php?id=<?php echo $order['job_id'];?>"><?php echo $order['job_title']; ?></a></td>
+										<td data-label="İş adı"><a href="view_job_admin.php?id=<?php echo $order['job_id'];?>"><?php echo $order['job_title']; ?></a></td>
+										<td data-label="Frilanser Ad/Soyad"><?php echo $order['fre_first'].' '.$order['fre_last']; ?></td>
 										<td data-label="İşəgötürən Ad/Soyad"><?php echo $order['emp_first'].' '.$order['emp_last']; ?></td>
-										<td data-label="Bitmə statusu"><?php if($order['completed_status']){ echo 'Bitib'; } else{echo 'Bitməyib';}?></td>
 										<td data-label="Tarix"><?php echo $order['created_at'];?></td>
-										<td data-label="Əməliyyata bax"><a href="view_operation.php?&id=<?php echo $order['order_id'];?>" style="color:black;font-size:20px;"><i class="icon-feather-search"></a></i></td>
-										<?php
-											if($order['completed_status']){
-										?>
-											<td data-label="Əməliyyatı Bitir"></td>
-										<?php } else{?>	
-											<td data-label="Əməliyyatı Bitir"><a href="../system/operationFreelancerController.php?operation=toggle&id=<?php echo $order['order_id'];?>" class="button">Bitir</a></td>
-										<?php } ?>
+										<td data-label="Əməliyyata bax"><a href="view_operation_admin.php?&id=<?php echo $order['order_id'];?>" style="color:black;font-size:20px;"><i class="icon-feather-search"></a></i></td>
+										<td data-label="Sil"><a href="../system/operationAdminController.php?operation=delete&id=<?php echo $order['order_id'];?>" style="color:black;font-size:20px;"><i class="icon-feather-delete"></a></i></td>	
+										
 									</tr>
 								<?php }?>
 							</table>

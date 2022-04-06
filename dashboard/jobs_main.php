@@ -12,7 +12,7 @@ if(1){
 	$minimumBalanceQuery->execute();
 	$minimumBalance = $minimumBalanceQuery->fetch(PDO::FETCH_ASSOC);
 
-	$maxMinPriceq= $pdo->prepare("SELECT MAX(job_price) as maxPrice, MIN(job_price) as minPrice FROM jobs INNER JOIN users on jobs.user_id=users.id WHERE verification_status=1 AND users.balance >= {$minimumBalance['minimum_balance']}");
+	$maxMinPriceq= $pdo->prepare("SELECT MAX(job_price) as maxPrice, MIN(job_price) as minPrice FROM jobs INNER JOIN users on jobs.user_id=users.id WHERE users.balance >= {$minimumBalance['minimum_balance']}");
 	$maxMinPriceq->execute();
 	$maxMinPrice = $maxMinPriceq->fetch(PDO::FETCH_ASSOC);
 
@@ -88,7 +88,7 @@ if(1){
 		$url.='&';
 	}
 
-	$jobCountQuery = $pdo->prepare("SELECT COUNT(*) as count FROM jobs INNER JOIN users on jobs.user_id=users.id WHERE verification_status=1 AND users.balance >= {$minimumBalance['minimum_balance']} {$searchSql}"); 
+	$jobCountQuery = $pdo->prepare("SELECT COUNT(*) as count FROM jobs INNER JOIN users on jobs.user_id=users.id WHERE users.balance >= {$minimumBalance['minimum_balance']} {$searchSql}"); 
 	$jobCountQuery->execute($params);
 	$jobCount = $jobCountQuery->fetch(PDO::FETCH_ASSOC);
 	$no_of_records_per_page = 10;
@@ -190,12 +190,12 @@ if(1){
 #endpagination
 
 
-	$jobsQuery = $pdo->prepare("SELECT 	jobs.job_id, jobs.job_price, jobs.job_title, jobs.job_description, jobs.verification_status,
+	$jobsQuery = $pdo->prepare("SELECT 	jobs.job_id, jobs.job_price, jobs.job_title, jobs.job_description,
 									categories.category_name, users.first_name, users.last_name
 									FROM jobs
 									INNER JOIN categories on jobs.category_id=categories.category_id
 									INNER JOIN users on jobs.user_id=users.id
-									WHERE verification_status=1 AND users.balance >= {$minimumBalance['minimum_balance']}
+									WHERE users.balance >= {$minimumBalance['minimum_balance']}
 									{$searchSql}
 									ORDER BY job_id DESC
 									LIMIT {$offset}, {$no_of_records_per_page}");

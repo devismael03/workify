@@ -161,7 +161,7 @@ if(1){
 		<div class="col-xl-4 col-lg-4">
 			<div class="sidebar-container">
 				<?php if(isemployer()){?>						
-					<a href="../system/operationEmployerController.php?operation=new&job_id=<?php echo $job['job_id'];?>" class="button"><i class="icon-feather-arrow-left"></i>Sifariş et</a><br>
+					<a href="../system/operationEmployerController.php?operation=new&job_id=<?php echo $job['job_id'];?>" class="button">Sifariş et</a><br>
 				<?php } ?>
 				<a href="<?php echo $urlToGoBack; ?>" class="button"><i class="icon-feather-arrow-left"></i>İşlər siyahısına geri dön</a>
 

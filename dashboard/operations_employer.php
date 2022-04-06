@@ -99,7 +99,7 @@ if(isemployer()){
 #endpagination
 
 	$ordersQuery = $pdo->prepare("SELECT jobs.job_id, jobs.job_price, jobs.job_title, jobs.job_description,
-										orders.order_id, orders.verification_status, orders.created_at, orders.completed_status,
+										orders.order_id, orders.created_at, orders.completed_status,
 										U1.first_name AS fre_first, U1.last_name AS fre_last,
 										U2.first_name AS emp_first, U2.last_name AS emp_last
 										FROM orders
@@ -143,7 +143,6 @@ if(isemployer()){
 									<th>Əməliyyat ID</th>
 									<th>İş adı</th>
 									<th>Frilanser Ad/Soyad</th>
-									<th>Təsdiq statusu</th>
 									<th>Bitmə statusu</th>
 									<th>Tarix</th>
 									<th>Əməliyyata bax</th>
@@ -155,7 +154,6 @@ if(isemployer()){
 										<td data-label="Əməliyyat ID"><?php echo $order['order_id'];?></td>
 										<td data-label="İş adı"><a href="view_job.php?id=<?php echo $order['job_id'];?>"><?php echo $order['job_title']; ?></a></td>
 										<td data-label="Frilanser Ad/Soyad"><?php echo $order['fre_first'].' '.$order['fre_last']; ?></td>
-										<td data-label="Təsdiq statusu"><?php if($order['verification_status']){ echo 'Aktiv'; } else{echo 'Deaktiv';}?></td>
 										<td data-label="Bitmə statusu"><?php if($order['completed_status']){ echo 'Bitib'; } else{echo 'Bitməyib';}?></td>
 										<td data-label="Tarix"><?php echo $order['created_at'];?></td>
 										<td data-label="Əməliyyata bax"><a href="view_operation.php?&id=<?php echo $order['order_id'];?>" style="color:black;font-size:20px;"><i class="icon-feather-search"></a></i></td>

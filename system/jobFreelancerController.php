@@ -148,6 +148,13 @@ if(isfreelancer()){
 
 
         if($verify){
+            $deleteLocationQuery = $pdo->prepare("DELETE FROM jobs_regions WHERE job_id=:jid");
+            $deleteLocationQuery->execute([":jid" => $verify["job_id"]]);
+
+            $addLocationQuery = $pdo->prepare("INSERT INTO jobs_regions(job_id, region_id) VALUES(?,?)");
+            foreach($regions as $region){
+                $addLocationQuery->execute([$verify["job_id"], $region]);
+            }
             $currentAmountOfPicturesQuery = $pdo->prepare("SELECT COUNT(*) as current_amount FROM jobs_pictures WHERE job_id=:jid");
             $currentAmountOfPicturesQuery->execute([':jid' =>$id]);
             $currentAmountOfPictures = $currentAmountOfPicturesQuery->fetch(PDO::FETCH_ASSOC);
@@ -155,9 +162,11 @@ if(isfreelancer()){
                 foreach($_FILES["pictures"]["tmp_name"] as $key=>$tmp_name){
                     $uploadedName = $_FILES["pictures"]["name"][$key];
                     $uploadedPath = $_FILES["pictures"]["tmp_name"][$key];
+                    if(empty($_FILES["pictures"]["tmp_name"][0])){
+                        break;
+                    }
                     $allowedTypes = [
                         'image/png' => 'png',
-                        'image/jpeg' => 'jpg',
                         'image/jpeg' => 'jpg'
                      ];
                     $fileSize = filesize($uploadedPath);
