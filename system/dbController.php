@@ -1,10 +1,15 @@
 <?php
 
-$cleardb_url = parse_url(getenv("CLEARDB_DATABASE_URL")); //in cloud(heroku) we have environment variable which holds configuration for connectinog to database
+/*$cleardb_url = parse_url(getenv("CLEARDB_DATABASE_URL")); //in cloud(heroku) we have environment variable which holds configuration for connectinog to database
 $cleardb_server = $cleardb_url["host"];
 $cleardb_username = $cleardb_url["user"];
 $cleardb_password = $cleardb_url["pass"];
-$cleardb_db = substr($cleardb_url["path"],1);
+$cleardb_db = substr($cleardb_url["path"],1); */
+
+$cleardb_db = "project";
+$cleardb_server="localhost";
+$cleardb_username="root";
+$cleardb_password = "";
 
 $dsn = 'mysql:dbname='.$cleardb_db.';host='.$cleardb_server.';charset=utf8';
 $user = 'root';

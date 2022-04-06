@@ -29,7 +29,25 @@ $countOfEmployers = $countOfEmployersQuery->fetch(PDO::FETCH_ASSOC);
 
 //Count of Employers end
 
+//count of freelancer jobs
 
+if(isfreelancer()){
+	$fid = $_SESSION['id'];
+	$countOfFreelancerJobsQuery = $pdo->prepare("SELECT COUNT(*) as count FROM jobs WHERE user_id=:fid");
+	$countOfFreelancerJobsQuery->execute(['fid' => $fid]);
+	$countOfFreelancerJobs = $countOfFreelancerJobsQuery->fetch(PDO::FETCH_ASSOC);
+}
+
+
+//count of freelancer jobs end
+
+//  Count of Categories 
+
+$countOfCategoriesQuery = $pdo->prepare("SELECT COUNT(*) as count FROM categories");
+$countOfCategoriesQuery->execute();
+$countOfCategories = $countOfCategoriesQuery->fetch(PDO::FETCH_ASSOC);
+
+// Count of Categories end
 
 ?>
 <!doctype html>
